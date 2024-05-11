@@ -45,7 +45,7 @@ const StyledBody = styled.section`
   margin: 0.4rem 0;
 `;
 
-const Footer = styled.footer`
+const StyledFooter = styled.footer`
   background-color: var(--color-grey-50);
   display: flex;
   justify-content: center;
@@ -92,15 +92,20 @@ function Row({ children }) {
   );
 }
 
-function Body({ children, cabins, render }) {
+function Body({ children, data, render }) {
   const { columns } = useContext(TableContext);
 
-  if (!cabins.length) return <Empty>No data available</Empty>;
-  return <StyledBody>{cabins.map(render)}</StyledBody>;
+  if (!data.length) return <Empty>No data available</Empty>;
+  return <StyledBody>{data.map(render)}</StyledBody>;
+}
+
+function Footer({ children }) {
+  return <StyledFooter>{children}</StyledFooter>;
 }
 
 Table.Header = Header;
 Table.Row = Row;
 Table.Body = Body;
+Table.Footer = Footer;
 
 export default Table;

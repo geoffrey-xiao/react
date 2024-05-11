@@ -53,7 +53,7 @@ const TableHeader = styled.header`
 // }
 
 export default function CartTable() {
-  const { isLoading, cabins, error } = useCabins();
+  const { isLoading, cabins = [], error } = useCabins();
   const [searchParams] = useSearchParams();
   const discount = searchParams.get("discount") || "all";
 
@@ -87,7 +87,7 @@ export default function CartTable() {
         <div></div>
       </Table.Header>
       <Table.Body
-        cabins={sortedValue}
+        data={sortedValue}
         render={(cabin) => <CabinRow cabin={cabin} key={cabin.id} />}
       ></Table.Body>
     </Table>
