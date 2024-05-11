@@ -10,12 +10,10 @@ import ConfirmDelete from "../../ui/ConfirmDelete";
 import {
   HiMiniDocumentDuplicate,
   HiMiniPencilSquare,
-  HiPencilSquare,
   HiTrash,
 } from "react-icons/hi2";
 import { useCreateCabin } from "./useCreateCabin";
 import Modal from "../../ui/Modal";
-import Menus from "../../ui/Menus";
 
 const TableRow = styled.div`
   display: grid;
@@ -115,29 +113,6 @@ function CabinRow({ cabin }) {
               />
             </Modal.Window>
           </Modal>
-          <Menus>
-            <Menus.Toggle id={cabinId}></Menus.Toggle>
-            <Menus.List id={cabinId}>
-              <Menus.Menu
-                icon={<HiMiniDocumentDuplicate />}
-                onClick={duplicateCabin}
-              >
-                copy
-              </Menus.Menu>
-              <Menus.Menu
-                icon={<HiPencilSquare />}
-                onClick={() => setShowForm((show) => !show)}
-              >
-                edit
-              </Menus.Menu>
-              <Menus.Menu
-                icon={<HiTrash />}
-                onClick={() => deleteCabin(cabinId)}
-              >
-                delete
-              </Menus.Menu>
-            </Menus.List>
-          </Menus>
         </ButtonGroup>
       </TableRow>
       {showForm && <CreateCabinForm cabin={cabin} />}

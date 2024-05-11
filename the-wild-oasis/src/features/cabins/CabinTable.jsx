@@ -5,6 +5,7 @@ import Spinner from "../../ui/Spinner";
 import { useQuery } from "@tanstack/react-query";
 import { useCabins } from "./useCabins";
 import Table from "../../ui/Table";
+import { useSearchParams } from "react-router-dom";
 
 const Table1 = styled.div`
   border: 1px solid var(--color-grey-200);
@@ -53,6 +54,26 @@ const TableHeader = styled.header`
 
 export default function CartTable() {
   const { isLoading, cabins, error } = useCabins();
+  const [searchParams] = useSearchParams();
+  const discount = searchParams.get("discount") || "all";
+
+  const sortBy = searchParams.get("sortBy") || "name-asc";
+
+  const [field, direction] = sortBy.split("-");
+  let filterValue = cabins;
+  if (discount === "discount") {
+    filterValue = cabins.filter((cabin) => cabin.discount !== 0);
+  }
+  if (discount === "no-discount") {
+    filterValue = cabins.filter((cabin) => cabin.discount === 0);
+  }
+
+  const modifier = direction === "asc" ? 1 : -1;
+
+  let sortedValue = filterValue.sort(
+    (a, b) => (a[field] - b[field]) * modifier
+  );
+
   // console.log(x);
   if (isLoading) return <Spinner />;
   return (
@@ -66,7 +87,7 @@ export default function CartTable() {
         <div></div>
       </Table.Header>
       <Table.Body
-        cabins={cabins}
+        cabins={sortedValue}
         render={(cabin) => <CabinRow cabin={cabin} key={cabin.id} />}
       ></Table.Body>
     </Table>

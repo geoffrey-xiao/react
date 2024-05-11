@@ -1,4 +1,7 @@
+import { createContext, useContext, useState } from "react";
+import { HiEllipsisVertical } from "react-icons/hi2";
 import styled from "styled-components";
+import { useOutsideClick } from "../hooks/useOutsideClick";
 
 const StyledMenu = styled.div`
   display: flex;
@@ -60,3 +63,75 @@ const StyledButton = styled.button`
     transition: all 0.3s;
   }
 `;
+
+const MenusContext = createContext();
+
+function Menus({ children }) {
+  const [openId, setOpenId] = useState("");
+  const [position, setPosition] = useState({});
+  const open = (id) => setOpenId(id);
+  const close = () => setOpenId("");
+  return (
+    <MenusContext.Provider
+      value={{ openId, open, close, position, setPosition }}
+    >
+      <StyledMenu>{children}</StyledMenu>
+    </MenusContext.Provider>
+  );
+}
+
+function Toggle({ id }) {
+  const { openId, open, close, position, setPosition } =
+    useContext(MenusContext);
+  const handleClick = (e) => {
+    const rect = e.target.closest("button").getBoundingClientRect();
+    setPosition({
+      x: window.innerWidth - rect.width - rect.x,
+      y: rect.y + rect.height + 8,
+    });
+    if (!openId || openId !== id) {
+      open(id);
+    } else {
+      close();
+    }
+  };
+  return (
+    <StyledToggle>
+      <HiEllipsisVertical onClick={handleClick} />
+    </StyledToggle>
+  );
+}
+
+function List({ children, id }) {
+  const { openId, position, close } = useContext(MenusContext);
+  const ref = useOutsideClick(close);
+  if (openId !== id) return null;
+  return (
+    <StyledList position={position} ref={ref}>
+      {children}
+    </StyledList>
+  );
+}
+
+function Menu({ children, icon, onClick }) {
+  const { openId, close } = useContext(MenusContext);
+
+  function handleClick() {
+    onClick?.();
+    close();
+  }
+  return (
+    <li onClick={handleClick}>
+      <StyledButton>
+        {icon}
+        <span>{children}</span>
+      </StyledButton>
+    </li>
+  );
+}
+
+Menus.Toggle = Toggle;
+Menus.List = List;
+Menus.Menu = Menu;
+
+export default Menus;
