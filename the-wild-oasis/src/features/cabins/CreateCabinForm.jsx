@@ -52,6 +52,7 @@ const Error = styled.span`
 `;
 
 function CreateCabinForm({ cabin = {}, onClose }) {
+  console.log("open");
   const queryClient = useQueryClient();
 
   const { id, ...editValue } = cabin;
