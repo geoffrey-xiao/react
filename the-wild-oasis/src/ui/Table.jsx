@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { getCabins } from "../services/apiCabins";
 import Spinner from "../ui/Spinner";
 import CabinRow from "../features/cabins/CabinRow";
+import { createContext, useContext } from "react";
+// import Empty from "./Empty";
 const StyledTable = styled.div`
   border: 1px solid var(--color-grey-200);
 
@@ -61,3 +63,44 @@ const Empty = styled.p`
   text-align: center;
   margin: 2.4rem;
 `;
+
+const TableContext = createContext();
+
+function Table({ children, columns }) {
+  return (
+    <TableContext.Provider value={{ columns }}>
+      <StyledTable>{children}</StyledTable>
+    </TableContext.Provider>
+  );
+}
+
+function Header({ children }) {
+  const { columns } = useContext(TableContext);
+  return (
+    <StyledHeader role="row" columns={columns}>
+      {children}
+    </StyledHeader>
+  );
+}
+
+function Row({ children }) {
+  const { columns } = useContext(TableContext);
+  return (
+    <StyledRow role="row" columns={columns}>
+      {children}
+    </StyledRow>
+  );
+}
+
+function Body({ children, cabins, render }) {
+  const { columns } = useContext(TableContext);
+
+  if (!cabins.length) return <Empty>No data available</Empty>;
+  return <StyledBody>{cabins.map(render)}</StyledBody>;
+}
+
+Table.Header = Header;
+Table.Row = Row;
+Table.Body = Body;
+
+export default Table;
