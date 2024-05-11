@@ -4,7 +4,7 @@ const Row = styled.div`
   display: flex;
 
   ${(props) =>
-    props.type === "horizon" &&
+    props.type === "horizontal" &&
     css`
       justify-content: space-between;
       align-items: center;

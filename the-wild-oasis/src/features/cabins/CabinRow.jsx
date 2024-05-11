@@ -1,4 +1,17 @@
 import styled from "styled-components";
+import { formatCurrency } from "../../utils/helpers";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteCabin } from "../../services/apiCabins";
+import toast from "react-hot-toast";
+import { useState } from "react";
+import CreateCabinForm from "./CreateCabinForm";
+import { useDeleteCabin } from "./useDeleteCabin";
+import {
+  HiMiniDocumentDuplicate,
+  HiMiniPencilSquare,
+  HiTrash,
+} from "react-icons/hi2";
+import { useCreateCabin } from "./useCreateCabin";
 
 const TableRow = styled.div`
   display: grid;
@@ -38,3 +51,61 @@ const Discount = styled.div`
   font-weight: 500;
   color: var(--color-green-700);
 `;
+
+const ButtonGroup = styled.div`
+  display: flex;
+  gap: 0.5rem;
+`;
+
+function CabinRow({ cabin }) {
+  const [showForm, setShowForm] = useState(false);
+  const {
+    id: cabinId,
+    name,
+    maxCapacity,
+    regularPrice,
+    discount,
+    description,
+    image,
+  } = cabin;
+
+  const { isDeleting, deleteCabin } = useDeleteCabin();
+  const { createCabin, addLoading } = useCreateCabin();
+
+  function duplicateCabin() {
+    const newCabin = {
+      name: `Copy of ${name}`,
+      maxCapacity,
+      regularPrice,
+      discount,
+      description,
+      image,
+    };
+    createCabin(newCabin);
+  }
+  return (
+    <>
+      <TableRow>
+        <Img src={image} />
+        <Cabin>{name}</Cabin>
+        <div>Fits up tp {maxCapacity} guests</div>
+        <Price>{formatCurrency(regularPrice)}</Price>
+        <Discount>{formatCurrency(discount)}</Discount>
+        <ButtonGroup>
+          <button onClick={duplicateCabin}>
+            <HiMiniDocumentDuplicate />
+          </button>
+          <button onClick={() => setShowForm((show) => !show)}>
+            <HiMiniPencilSquare />
+          </button>
+          <button onClick={() => deleteCabin(cabinId)} disabled={isDeleting}>
+            <HiTrash />
+          </button>
+        </ButtonGroup>
+      </TableRow>
+      {showForm && <CreateCabinForm cabin={cabin} />}
+    </>
+  );
+}
+
+export default CabinRow;
