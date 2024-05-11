@@ -6,12 +6,14 @@ import toast from "react-hot-toast";
 import { useState } from "react";
 import CreateCabinForm from "./CreateCabinForm";
 import { useDeleteCabin } from "./useDeleteCabin";
+import ConfirmDelete from "../../ui/ConfirmDelete";
 import {
   HiMiniDocumentDuplicate,
   HiMiniPencilSquare,
   HiTrash,
 } from "react-icons/hi2";
 import { useCreateCabin } from "./useCreateCabin";
+import Modal from "../../ui/Modal";
 
 const TableRow = styled.div`
   display: grid;
@@ -98,9 +100,19 @@ function CabinRow({ cabin }) {
           <button onClick={() => setShowForm((show) => !show)}>
             <HiMiniPencilSquare />
           </button>
-          <button onClick={() => deleteCabin(cabinId)} disabled={isDeleting}>
-            <HiTrash />
-          </button>
+          <Modal>
+            <Modal.Open opens="delete">
+              <button>
+                <HiTrash />
+              </button>
+            </Modal.Open>
+            <Modal.Window name="delete">
+              <ConfirmDelete
+                onConfirm={() => deleteCabin(cabinId)}
+                disabled={isDeleting}
+              />
+            </Modal.Window>
+          </Modal>
         </ButtonGroup>
       </TableRow>
       {showForm && <CreateCabinForm cabin={cabin} />}

@@ -1,7 +1,14 @@
 import { HiXMark } from "react-icons/hi2";
 import styled from "styled-components";
 import { createPortal } from "react-dom";
-import { cloneElement, createContext, useContext, useState } from "react";
+import {
+  cloneElement,
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 const StyledModal = styled.div`
   position: fixed;
@@ -99,12 +106,23 @@ function Open({ children, opens: openName }) {
 }
 
 function Window({ children, windowName }) {
+  const ref = useRef();
   const { openName, close } = useContext(ModalContext);
+  useEffect(() => {
+    function handleClick(e) {
+      if (ref.current && !ref.current.contains(e.target)) {
+        close();
+      }
+    }
+    document.addEventListener("click", handleClick, true);
+    return () => document.removeEventListener("click", handleClick, true);
+  }, [close]);
+
   console.log("openName", openName, "windowName", windowName);
   if (openName !== windowName) return null;
   return (
     <Overlay>
-      <StyledModal>
+      <StyledModal ref={ref}>
         <Button onClick={() => close()}>
           <HiXMark />
         </Button>
