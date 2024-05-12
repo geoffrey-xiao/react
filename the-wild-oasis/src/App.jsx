@@ -24,6 +24,8 @@ import Booking from "./pages/Booking";
 import Checkin from "./pages/Checkin";
 import ProtectedRoutes from "./ui/ProtectedRoutes";
 import { DarkModeContextProvider } from "./contexts/DarkModeContext";
+import { ErrorBoundary } from "react-error-boundary";
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
