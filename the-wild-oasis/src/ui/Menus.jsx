@@ -2,6 +2,7 @@ import { createContext, useContext, useState } from "react";
 import { HiEllipsisVertical } from "react-icons/hi2";
 import styled from "styled-components";
 import { useOutsideClick } from "../hooks/useOutsideClick";
+import { useNavigate } from "react-router-dom";
 
 const StyledMenu = styled.div`
   display: flex;
@@ -69,11 +70,12 @@ const MenusContext = createContext();
 function Menus({ children }) {
   const [openId, setOpenId] = useState("");
   const [position, setPosition] = useState({});
+  const navigate = useNavigate();
   const open = (id) => setOpenId(id);
   const close = () => setOpenId("");
   return (
     <MenusContext.Provider
-      value={{ openId, open, close, position, setPosition }}
+      value={{ openId, open, close, position, setPosition, navigate }}
     >
       <StyledMenu>{children}</StyledMenu>
     </MenusContext.Provider>
@@ -114,10 +116,14 @@ function List({ children, id }) {
 }
 
 function Menu({ children, icon, onClick }) {
-  const { openId, close } = useContext(MenusContext);
+  const { openId, close, navigate } = useContext(MenusContext);
 
   function handleClick() {
-    onClick?.();
+    if (onClick && typeof onClick === "string") {
+      navigate(onClick);
+    } else {
+      onClick?.();
+    }
     close();
   }
   return (

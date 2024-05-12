@@ -9,6 +9,11 @@ import Button from "../../ui/Button";
 import ButtonText from "../../ui/ButtonText";
 
 import { useMoveBack } from "../../hooks/useMoveBack";
+import { useBooking } from "./useBooking";
+import { useParams } from "react-router-dom";
+import Spinner from "../../ui/Spinner";
+import Checkbox from "../../ui/Checkbox";
+import { useEffect, useState } from "react";
 
 const HeadingGroup = styled.div`
   display: flex;
@@ -17,8 +22,10 @@ const HeadingGroup = styled.div`
 `;
 
 function BookingDetail() {
-  const booking = {};
-  const status = "checked-in";
+  const { booking = {}, isLoading } = useBooking();
+  const { status } = booking;
+  const { bookingId } = useParams();
+  // const status = "checked-in";
 
   const moveBack = useMoveBack();
 
@@ -28,11 +35,13 @@ function BookingDetail() {
     "checked-out": "silver",
   };
 
+  if (isLoading) return <Spinner />;
+
   return (
     <>
       <Row type="horizontal">
         <HeadingGroup>
-          <Heading as="h1">Booking #X</Heading>
+          <Heading as="h1">Booking {bookingId}</Heading>
           <Tag type={statusToTagName[status]}>{status.replace("-", " ")}</Tag>
         </HeadingGroup>
         <ButtonText onClick={moveBack}>&larr; Back</ButtonText>
@@ -40,7 +49,25 @@ function BookingDetail() {
 
       <BookingDataBox booking={booking} />
 
+      {booking.status === "unconfirmed" && (
+        <ButtonGroup>
+          <Button variation="primary" onClick={moveBack}>
+            Check in
+          </Button>
+        </ButtonGroup>
+      )}
+
       <ButtonGroup>
+        {booking.status === "unconfirmed" && (
+          <Button variation="primary" onClick={moveBack}>
+            Check in
+          </Button>
+        )}
+        {booking.status === "checked-in" && (
+          <Button variation="primary" onClick={moveBack}>
+            Check out
+          </Button>
+        )}
         <Button variation="secondary" onClick={moveBack}>
           Back
         </Button>

@@ -6,6 +6,9 @@ import Table from "../../ui/Table";
 
 import { formatCurrency } from "../../utils/helpers";
 import { formatDistanceFromNow } from "../../utils/helpers";
+import Menus from "../../ui/Menus";
+import { HiArrowDownOnSquare, HiEye } from "react-icons/hi2";
+import { useCheckout } from "../check-in-out/useCheckout";
 
 const Cabin = styled.div`
   font-size: 1.6rem;
@@ -54,6 +57,8 @@ function BookingRow({
     "checked-out": "silver",
   };
 
+  const { checkout, isCheckingout } = useCheckout();
+
   return (
     <Table.Row>
       <Cabin>{cabinName}</Cabin>
@@ -79,6 +84,30 @@ function BookingRow({
       <Tag type={statusToTagName[status]}>{status.replace("-", " ")}</Tag>
 
       <Amount>{formatCurrency(totalPrice)}</Amount>
+      <Menus>
+        <Menus.Toggle id={bookingId}></Menus.Toggle>
+        <Menus.List id={bookingId}>
+          <Menus.Menu icon={<HiEye />} onClick={`/bookings/${bookingId}`}>
+            See details
+          </Menus.Menu>
+          {status === "unconfirmed" && (
+            <Menus.Menu
+              icon={<HiArrowDownOnSquare />}
+              onClick={`/checkin/${bookingId}`}
+            >
+              Check in
+            </Menus.Menu>
+          )}
+          {status === "checked-in" && (
+            <Menus.Menu
+              icon={<HiArrowDownOnSquare />}
+              onClick={() => checkout(bookingId)}
+            >
+              Check out
+            </Menus.Menu>
+          )}
+        </Menus.List>
+      </Menus>
     </Table.Row>
   );
 }
