@@ -5,6 +5,7 @@ import ButtonIcon from "./ButtonIcon";
 import { HiUser } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
 import UserAvatar from "../features/authentication/UserAvatar";
+import DarkModeToggle from "./DarkModeToggle";
 
 const StyledHeaderMenu = styled.ul`
   display: flex;
@@ -17,6 +18,9 @@ const HeaderMenu = () => {
     <StyledHeaderMenu>
       <li>
         <UserAvatar />
+      </li>
+      <li>
+        <DarkModeToggle />
       </li>
       <li>
         <ButtonIcon onClick={() => navigate("/account")}>
