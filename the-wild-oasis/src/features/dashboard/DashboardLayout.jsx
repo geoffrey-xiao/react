@@ -38,9 +38,8 @@ export default function DashboardLayout() {
         numDays={numDays}
         cabinCount={cabins.length}
       />
-      <DurationChart confirmedStays={confirmedStays} />
-
       <Today />
+      <DurationChart confirmedStays={confirmedStays} />
 
       {/* <div>booking</div> */}
       <SalesChart bookings={bookings} numDays={numDays}></SalesChart>
