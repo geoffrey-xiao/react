@@ -40,7 +40,8 @@ const Error = styled.span`
 export default function FormRow({ children, label, error }) {
   return (
     <StyledFormRow>
-      <Label htmlFor={children.props.id}>{label}</Label>
+      {/* <Label htmlFor={children.props.id}>{label}</Label> */}
+      <Label>{label}</Label>
       {children}
       {error && <Error>{error}</Error>}
     </StyledFormRow>
