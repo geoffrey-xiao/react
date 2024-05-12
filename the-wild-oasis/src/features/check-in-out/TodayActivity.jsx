@@ -42,18 +42,24 @@ const NoActivity = styled.p`
 function Today() {
   const { activities, isLoading } = useTodayActivity();
   console.log("activies", activities);
-  if (isLoading) return <Spinner />;
-  if (activities.length === 0) return <NoActivity> no activity</NoActivity>;
+  // if (isLoading) return <Spinner />;
+  // if (activities.length === 0) return <NoActivity> no activity</NoActivity>;
   return (
     <StyledToday>
       <Row type="horizontal">
         <Heading as="h2">Today</Heading>
       </Row>
-      <TodayList>
-        {activities.map((activity) => (
-          <TodayItem key={activity.id} activity={activity} />
-        ))}
-      </TodayList>
+      {isLoading ? (
+        <Spinner />
+      ) : activities.length === 0 ? (
+        <NoActivity>no data</NoActivity>
+      ) : (
+        <TodayList>
+          {activities.map((activity) => (
+            <TodayItem key={activity.id} activity={activity} />
+          ))}
+        </TodayList>
+      )}
     </StyledToday>
   );
 }

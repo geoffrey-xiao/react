@@ -92,7 +92,7 @@ export default function SalesChart({ bookings, numDays }) {
         Stats from {format(allDays.at(0), "MMM dd yyyy")} to{" "}
         {format(allDays.at(-1), "MMM dd yyyy")}
       </Heading>
-      <ResponsiveContainer height={400}>
+      <ResponsiveContainer>
         <AreaChart data={data}>
           <CartesianGrid strokeDasharray={"3,3"} />
           <XAxis

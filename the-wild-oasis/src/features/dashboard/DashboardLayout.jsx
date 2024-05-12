@@ -41,12 +41,9 @@ export default function DashboardLayout() {
       <DurationChart confirmedStays={confirmedStays} />
 
       <Today />
-      <SalesChart bookings={bookings} numDays={numDays}></SalesChart>
 
-      <div>chart</div>
-      <div>statistic</div>
-      <div>people</div>
-      <div>calendar</div>
+      {/* <div>booking</div> */}
+      <SalesChart bookings={bookings} numDays={numDays}></SalesChart>
     </StyledDashboardLayout>
   );
 }
